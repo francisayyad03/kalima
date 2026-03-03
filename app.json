@@ -1,15 +1,20 @@
 {
   "expo": {
-    "name": "arabic-wordle",
-    "slug": "arabic-wordle",
+    "name": "Kalima | كلمة",
+    "slug": "kalima",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "arabicwordle",
+    "scheme": "kalima",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kalima.app",
+      "buildNumber": "3",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,12 +35,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#2C2A28",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#2C2A28"
           }
         }
       ],
@@ -44,6 +46,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bd31e6dc-a78a-4368-87a4-7e427166f647"
+      }
     }
   }
 }
