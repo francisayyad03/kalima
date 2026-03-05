@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle } from 'react-native';
+import { Pressable, Text, ViewStyle } from 'react-native';
 import { COLORS } from '../utils/colors';
 
 export type KeyState = 'correct' | 'present' | 'absent';
@@ -29,7 +29,7 @@ export function Key({
     state === 'absent'  ? COLORS.grid  :
     COLORS.lightGrey;
 
-  const fontWeight = state === 'absent' || state === 'present' ? '600' : '700';
+  const fontWeight = '400';
   const color = state === 'absent' ? COLORS.lightGrey : '#1B1B1B';
 
   const borderRadius = Math.round(width * 0.28);
@@ -58,6 +58,7 @@ export function Key({
       ]}
     >
       <Text
+        allowFontScaling={false}
         style={{
           fontFamily: 'System',
           fontSize,
