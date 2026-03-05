@@ -40,6 +40,7 @@ export function Tile({ letter = '', state, size }: TileProps) {
       ]}
     >
       <Text
+        allowFontScaling={false}
         style={[
           styles.letter,
           {

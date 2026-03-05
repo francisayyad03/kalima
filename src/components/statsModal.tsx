@@ -1,5 +1,6 @@
-import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import { COLORS } from '../utils/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Stats {
   gamesPlayed: number;
@@ -18,6 +19,10 @@ interface StatsModalProps {
 }
 
 export function StatsModal({ visible, stats, onClose }: StatsModalProps) {
+  const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const modalMaxHeight = height - insets.top - insets.bottom - 24;
+
   const safeStats = stats ?? {
     gamesPlayed: 0,
     gamesWon: 0,
@@ -35,8 +40,13 @@ export function StatsModal({ visible, stats, onClose }: StatsModalProps) {
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
+      <View style={[styles.overlay, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 8 }]}>
+        <View style={[styles.modal, { maxHeight: modalMaxHeight }]}>
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator
+          >
           <Text style={styles.title}>إحصائياتك</Text>
 
           {/* ====== STATS SUMMARY ====== */}
@@ -66,6 +76,7 @@ export function StatsModal({ visible, stats, onClose }: StatsModalProps) {
               );
             })}
           </View>
+          </ScrollView>
 
           <Pressable onPress={onClose} style={styles.button}>
             <Text style={styles.buttonText}>موافق</Text>
@@ -96,8 +107,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.charcoal,
     borderRadius: 12,
     padding: 24,
-    width: '90%',
+    width: '92%',
     alignItems: 'center',
+  },
+  scroll: {
+    width: '100%',
+  },
+  scrollContent: {
+    alignItems: 'center',
+    paddingBottom: 8,
   },
   title: {
     color: COLORS.lightGrey,
@@ -164,6 +182,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 6,
+    marginTop: 8,
   },
   buttonText: {
     color: COLORS.charcoal,

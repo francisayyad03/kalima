@@ -1,5 +1,6 @@
-import { Modal, View, Text, StyleSheet, Pressable, Linking } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, Linking, ScrollView, useWindowDimensions } from 'react-native';
 import { COLORS } from '../utils/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HelpModalProps {
   visible: boolean;
@@ -7,6 +8,9 @@ interface HelpModalProps {
 }
 const PRIVACY_URL = 'https://francisayyad03.github.io/kalimaPrivacy/';
 export function HelpModal({ visible, onClose }: HelpModalProps) {
+  const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const modalMaxHeight = height - insets.top - insets.bottom - 24;
 
   const openPrivacy = () => {
     Linking.openURL(PRIVACY_URL);
@@ -14,8 +18,13 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
+      <View style={[styles.overlay, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 8 }]}>
+        <View style={[styles.modal, { maxHeight: modalMaxHeight }]}>
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator
+          >
           <Text style={styles.title}>طريقة اللعب</Text>
 
           <Text style={styles.body}>
@@ -55,6 +64,7 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
           <Pressable onPress={openPrivacy}>
             <Text style={styles.privacyText}>سياسة الخصوصية</Text>
           </Pressable>
+          </ScrollView>
 
           <Pressable onPress={onClose} style={styles.button}>
             <Text style={styles.buttonText}>موافق</Text>
@@ -76,8 +86,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.charcoal,
     borderRadius: 12,
     padding: 24,
-    width: '90%',
+    width: '92%',
     alignItems: 'center',
+  },
+  scroll: {
+    width: '100%',
+  },
+  scrollContent: {
+    alignItems: 'center',
+    paddingBottom: 8,
   },
   title: {
     color: COLORS.lightGrey,
@@ -148,6 +165,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 8,
+    marginTop: 8,
   },
   buttonText: {
     color: COLORS.charcoal,

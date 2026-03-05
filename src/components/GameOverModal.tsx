@@ -1,6 +1,7 @@
-import { Modal, View, Text, StyleSheet, Pressable, Share } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, Share, ScrollView, useWindowDimensions } from 'react-native';
 import type { TileResult, TileState } from '../game/types';
 import { COLORS } from '../utils/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Stats {
   gamesPlayed: number;
@@ -29,6 +30,9 @@ export function GameOverModal({
   results,
   onClose,
 }: GameOverModalProps) {
+  const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const modalMaxHeight = height - insets.top - insets.bottom - 24;
   const isWin = status === 'won';
 
   const safeStats = stats ?? {
@@ -81,8 +85,13 @@ export function GameOverModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
+      <View style={[styles.overlay, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 8 }]}>
+        <View style={[styles.modal, { maxHeight: modalMaxHeight }]}>
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator
+          >
           <Text style={styles.title}>
             {isWin ? '🎉 فزت!' : '😔 انتهت اللعبة'}
           </Text>
@@ -116,6 +125,7 @@ export function GameOverModal({
               );
             })}
           </View>
+          </ScrollView>
 
           {/* BUTTONS */}
           <View style={styles.buttonRow}>
@@ -153,8 +163,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.charcoal,
     borderRadius: 12,
     padding: 24,
-    width: '90%',
+    width: '92%',
     alignItems: 'center',
+  },
+  scroll: {
+    width: '100%',
+  },
+  scrollContent: {
+    alignItems: 'center',
+    paddingBottom: 8,
   },
   title: {
     color: COLORS.lightGrey,
