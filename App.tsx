@@ -10,6 +10,10 @@ import { HelpModal } from './src/components/helpModal';
 import { COLORS } from './src/utils/colors';
 import { hasSeenHelpModal, markHelpModalSeen } from './src/game/storage';
 import {
+  setupReminderNotificationsAsync,
+  // showcaseAllReminderMessagesForTestingAsync,
+} from './src/notifications/reminders';
+import {
   SafeAreaView,
   useSafeAreaInsets,
   SafeAreaProvider,
@@ -22,6 +26,14 @@ import { LoadingScreen } from './src/components/loadingScreen';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    void setupReminderNotificationsAsync();
+    // if (__DEV__) {
+    //   void showcaseAllReminderMessagesForTestingAsync();
+    // }
+  }, []);
+
   return (
     <SafeAreaProvider>
       {!isReady ? (
