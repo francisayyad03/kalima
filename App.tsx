@@ -8,6 +8,11 @@ import { useState, useEffect, useRef } from 'react';
 import { StatsModal } from './src/components/statsModal';
 import { HelpModal } from './src/components/helpModal';
 import { COLORS } from './src/utils/colors';
+import { hasSeenHelpModal, markHelpModalSeen } from './src/game/storage';
+import {
+  setupReminderNotificationsAsync,
+  // showcaseAllReminderMessagesForTestingAsync,
+} from './src/notifications/reminders';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -21,6 +26,14 @@ import { LoadingScreen } from './src/components/loadingScreen';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    void setupReminderNotificationsAsync();
+    // if (__DEV__) {
+    //   void showcaseAllReminderMessagesForTestingAsync();
+    // }
+  }, []);
+
   return (
     <SafeAreaProvider>
       {!isReady ? (
@@ -39,6 +52,27 @@ function AppInner() {
   const [showModal, setShowModal] = useState(true);
   const [showHelp, setShowHelp] = useState(false);
   const [showStats, setShowStats] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const openHelpOnFirstLaunch = async () => {
+      try {
+        const seen = await hasSeenHelpModal();
+        if (!seen) {
+          await markHelpModalSeen();
+          if (isMounted) setShowHelp(true);
+        }
+      } catch {
+      }
+    };
+
+    void openHelpOnFirstLaunch();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();

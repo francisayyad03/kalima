@@ -33,8 +33,18 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
 
           {/* ===== RULES ===== */}
           <View style={styles.rules}>
-            <Text style={styles.ruleLine}>🟩 الحرف صحيح وفي مكانه</Text>
-            <Text style={styles.ruleLine}>🟨 الحرف موجود لكن بمكان آخر</Text>
+            <View style={styles.ruleRow}>
+              <View style={[styles.ruleSwatch, { backgroundColor: '#6AAA64' }]} />
+              <Text style={styles.ruleLine}>الحرف موجود وبمكانه الصحيح</Text>
+            </View>
+            <View style={styles.ruleRow}>
+              <View style={[styles.ruleSwatch, { backgroundColor: '#C9B458' }]} />
+              <Text style={styles.ruleLine}>الحرف موجود لكن بمكان آخر</Text>
+            </View>
+            <View style={styles.ruleRow}>
+              <View style={[styles.ruleSwatch, { backgroundColor: '#787C7E' }]} />
+              <Text style={styles.ruleLine}>الحرف غير موجود في الكلمة</Text>
+            </View>
           </View>
 
           {/* ===== LANGUAGE NOTES ===== */}
@@ -57,7 +67,7 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
           </ScrollView>
 
           <Pressable onPress={onClose} style={styles.button}>
-            <Text style={styles.buttonText}>حسناً</Text>
+            <Text style={styles.buttonText}>موافق</Text>
           </Pressable>
         </View>
       </View>
@@ -111,7 +121,27 @@ const styles = StyleSheet.create({
   ruleLine: {
     color: COLORS.lightGrey,
     fontSize: 15,
+    textAlign: 'right',
+  },
+  ruleRow: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 10,
     marginBottom: 8,
+  },
+  ruleSwatch: {
+    width: 18,
+    height: 18,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#3A3A3A',
+    flexShrink: 0,
+  },
+  noteTitle: {
+    color: COLORS.lightGrey,
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 6,
     textAlign: 'right',
   },
   notes: {
@@ -122,13 +152,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#3A3A3A',
     marginBottom: 18,
-  },
-  noteTitle: {
-    color: COLORS.lightGrey,
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    textAlign: 'right',
   },
   noteText: {
     color: COLORS.lightGrey,

@@ -134,7 +134,7 @@ export function GameOverModal({
             </Pressable>
 
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>حسناً</Text>
+              <Text style={styles.closeButtonText}>موافق</Text>
             </Pressable>
           </View>
         </View>
@@ -189,7 +189,9 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
-    letterSpacing: 2,
+    letterSpacing: 0,
+    writingDirection: 'rtl',
+    textAlign: 'center',
   },
 
   statsRow: {

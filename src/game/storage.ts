@@ -25,6 +25,7 @@ export type PersistedStats = {
 
 const GAME_KEY = "arabicwordle.game.v1";
 const STATS_KEY = "arabicwordle.stats.v1";
+const HELP_SEEN_KEY = "arabicwordle.helpSeen.v1";
 
 export async function saveGameState(state: PersistedGame) {
   await AsyncStorage.setItem(GAME_KEY, JSON.stringify(state));
@@ -46,4 +47,13 @@ export async function saveStats(stats: PersistedStats) {
 export async function loadStats(): Promise<PersistedStats | null> {
   const raw = await AsyncStorage.getItem(STATS_KEY);
   return raw ? (JSON.parse(raw) as PersistedStats) : null;
+}
+
+export async function hasSeenHelpModal(): Promise<boolean> {
+  const raw = await AsyncStorage.getItem(HELP_SEEN_KEY);
+  return raw === "1";
+}
+
+export async function markHelpModalSeen() {
+  await AsyncStorage.setItem(HELP_SEEN_KEY, "1");
 }

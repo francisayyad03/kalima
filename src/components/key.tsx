@@ -29,7 +29,7 @@ export function Key({
     state === 'absent'  ? COLORS.grid  :
     COLORS.lightGrey;
 
-  const fontWeight = '400';
+  const fontWeight = '500';
   const color = state === 'absent' ? COLORS.lightGrey : '#1B1B1B';
 
   const borderRadius = Math.round(width * 0.28);
