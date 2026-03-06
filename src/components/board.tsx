@@ -6,12 +6,13 @@ interface BoardProps {
   guesses: string[];
   results: TileResult[][];
   currentGuess: string;
+  status: 'playing' | 'won' | 'lost';
 }
 
 const ROWS = 6;
 const COLS = 5;
 
-export function Board({ guesses, results, currentGuess }: BoardProps) {
+export function Board({ guesses, results, currentGuess, status }: BoardProps) {
   const { width, height } = useWindowDimensions();
 
   const shortSide = Math.min(width, height);
@@ -59,12 +60,16 @@ export function Board({ guesses, results, currentGuess }: BoardProps) {
                 letter = currentGuess[colIndex] || '';
               }
 
+              const isWinningRevealRow = status === 'won' && rowIndex === results.length - 1;
+
               return (
                 <Tile
                   key={colIndex}
                   letter={letter}
                   state={state}
                   size={tileSize}
+                  revealDelayMs={isWinningRevealRow ? colIndex * 80 : 0}
+                  animateReveal={isWinningRevealRow}
                 />
               );
             })}

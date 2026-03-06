@@ -11,7 +11,7 @@ import { COLORS } from './src/utils/colors';
 import { hasSeenHelpModal, markHelpModalSeen } from './src/game/storage';
 import {
   setupReminderNotificationsAsync,
-  showcaseAllReminderMessagesForTestingAsync,
+  // showcaseAllReminderMessagesForTestingAsync,
 } from './src/notifications/reminders';
 import {
   SafeAreaView,
@@ -29,9 +29,9 @@ export default function App() {
 
   useEffect(() => {
     void setupReminderNotificationsAsync();
-    if (__DEV__) {
-      void showcaseAllReminderMessagesForTestingAsync();
-    }
+    // if (__DEV__) {
+    //   void showcaseAllReminderMessagesForTestingAsync();
+    // }
   }, []);
 
   return (
@@ -49,7 +49,7 @@ function AppInner() {
   const game = useGame();
   const keyStates = getKeyboardState(game.results);
 
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showStats, setShowStats] = useState(false);
 
@@ -73,6 +73,24 @@ function AppInner() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (game.status !== 'playing') {
+      void setupReminderNotificationsAsync();
+    }
+  }, [game.status]);
+
+  useEffect(() => {
+    if (game.status === 'playing') {
+      setShowModal(false);
+      return;
+    }
+
+    setShowModal(false);
+    const delayMs = game.status === 'lost' ? 500 : 1000;
+    const timer = setTimeout(() => setShowModal(true), delayMs);
+    return () => clearTimeout(timer);
+  }, [game.status]);
 
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
@@ -198,6 +216,7 @@ function AppInner() {
           guesses={game.guesses}
           results={game.results}
           currentGuess={game.currentGuess}
+          status={game.status}
         />
       </View>
 

@@ -73,6 +73,15 @@ async function cancelExistingReminderSchedulesAsync() {
 }
 
 async function scheduleReminderNotificationsAsync() {
+  const stats = await loadStats();
+  const today = getLocalDayId();
+
+  // Do not schedule reminders for days already completed.
+  if (stats?.lastCompletedDayId === today) {
+    await AsyncStorage.setItem(REMINDER_IDS_KEY, JSON.stringify([]));
+    return;
+  }
+
   const body = await pickDailyMessageFromStats();
 
   const dailyId = await Notifications.scheduleNotificationAsync({
