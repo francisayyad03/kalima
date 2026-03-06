@@ -34,11 +34,11 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
           {/* ===== RULES ===== */}
           <View style={styles.rules}>
             <View style={styles.ruleRow}>
-              <View style={[styles.ruleSwatch, { backgroundColor: '#6AAA64' }]} />
+              <View style={[styles.ruleSwatch, { backgroundColor: COLORS.green }]} />
               <Text style={styles.ruleLine}>الحرف موجود وبمكانه الصحيح</Text>
             </View>
             <View style={styles.ruleRow}>
-              <View style={[styles.ruleSwatch, { backgroundColor: '#C9B458' }]} />
+              <View style={[styles.ruleSwatch, { backgroundColor: COLORS.yellow }]} />
               <Text style={styles.ruleLine}>الحرف موجود لكن بمكان آخر</Text>
             </View>
             <View style={styles.ruleRow}>

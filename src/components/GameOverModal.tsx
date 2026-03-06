@@ -69,7 +69,14 @@ export function GameOverModal({
       )
       .join('\n');
 
-    const day = safeStats.lastCompletedDayId ? ` ${safeStats.lastCompletedDayId}` : '';
+    const formatDayForShare = (dayId: string) =>
+      dayId
+        .split('')
+        // Prevent apps like WhatsApp from auto-linking as a phone/number.
+        .map((ch) => (/\d/.test(ch) ? `${ch}\u2060` : ch))
+        .join('');
+
+    const day = safeStats.lastCompletedDayId ? ` ${formatDayForShare(safeStats.lastCompletedDayId)}` : '';
 
     return `Kalima${day} ${score}\n\n${grid}`;
   }
