@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { evaluateGuess } from './rules';
 import { isGuessAllowed } from './validator';
-import { getDailyWord } from './dailyword';
+import { getDailyWord, getDailyWordDisplay } from './dailyword';
 import { TileResult } from './types';
 import { ALLOWED_WORDS } from '../data/allowed';
 import { normalizeArabic } from '../utils/arabic';
@@ -46,6 +46,7 @@ export function useGame() {
   // Same as your old: answer is stable + deterministic per day
   const [dayId, setDayId] = useState(initialDayId);
   const [answer, setAnswer] = useState(() => getDailyWord(initialDayId));
+  const answerDisplay = getDailyWordDisplay(dayId);
 
   const [guesses, setGuesses] = useState<string[]>([]);
   const [results, setResults] = useState<TileResult[][]>([]);
@@ -58,7 +59,7 @@ export function useGame() {
   // LOAD once (hydrate)
   useEffect(() => {
     (async () => {
-      const today = getLocalDayId(); // add random date here for testing: "2024-01-01" and etc
+      const today = getLocalDayId();
 
       // stats
       const savedStats = await loadStats();
@@ -239,6 +240,7 @@ export function useGame() {
 
   return {
     answer,
+    answerDisplay,
     guesses,
     results,
     currentGuess,

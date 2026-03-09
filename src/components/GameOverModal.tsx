@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, Pressable, Share, ScrollView, useWindowDimensions, PixelRatio } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, Share, ScrollView, useWindowDimensions, PixelRatio, Linking } from 'react-native';
 import type { TileResult, TileState } from '../game/types';
 import { COLORS } from '../utils/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -91,6 +91,15 @@ export function GameOverModal({
     }
   }
 
+  async function openDictionaryForAnswer() {
+    const url = `https://www.almaany.com/ar/dict/ar-ar/${encodeURIComponent(answer)}/`;
+    try {
+      await Linking.openURL(url);
+    } catch (e) {
+      console.log('Open dictionary failed:', e);
+    }
+  }
+
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={[styles.overlay, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 8 }]}>
@@ -105,7 +114,10 @@ export function GameOverModal({
           </Text>
 
           <Text style={styles.subtitle}>الكلمة كانت</Text>
-          <Text style={styles.answer}>{answer}</Text>
+          <Pressable onPress={openDictionaryForAnswer} accessibilityRole="link" style={styles.answerPressable}>
+            <Text style={styles.answer}>{answer}</Text>
+            <Text style={[styles.subtitle, styles.answerHint]}>{`>> ما معنى كلمة ${answer}؟`}</Text>
+          </Pressable>
 
           {/* STATS SUMMARY */}
           <View style={[styles.statsRow, useWrappedStats && styles.statsRowWrapped]}>
@@ -204,10 +216,21 @@ const styles = StyleSheet.create({
     color: COLORS.lightGrey,
     fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 8,
     letterSpacing: 0,
     writingDirection: 'rtl',
     textAlign: 'center',
+  },
+  answerHint: {
+    marginBottom: 10,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+  answerPressable: {
+    alignSelf: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#8DB2D6',
+    borderStyle: 'dashed',
   },
 
   statsRow: {

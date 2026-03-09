@@ -239,7 +239,7 @@ function AppInner() {
         <GameOverModal
           visible={showModal}
           status={game.status}
-          answer={game.answer}
+          answer={game.answerDisplay}
           stats={game.stats}
           results={game.results}
           onClose={() => setShowModal(false)}
