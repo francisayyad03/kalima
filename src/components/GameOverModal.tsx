@@ -228,9 +228,6 @@ const styles = StyleSheet.create({
   },
   answerPressable: {
     alignSelf: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#8DB2D6',
-    borderStyle: 'dashed',
   },
 
   statsRow: {
