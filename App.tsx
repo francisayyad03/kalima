@@ -142,6 +142,8 @@ function AppInner() {
 
   // ===== TOAST =====
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [invalidGuessSignal, setInvalidGuessSignal] = useState(0);
+  const [invalidGuessRow, setInvalidGuessRow] = useState<number | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showToast = (msg: string) => {
@@ -217,6 +219,8 @@ function AppInner() {
           results={game.results}
           currentGuess={game.currentGuess}
           status={game.status}
+          invalidGuessSignal={invalidGuessSignal}
+          invalidGuessRow={invalidGuessRow}
         />
       </View>
 
@@ -227,7 +231,11 @@ function AppInner() {
           onEnter={() => {
             if (game.currentGuess.length !== 5) return;
             const ok = game.submitGuess();
-            if (!ok) showToast('الكلمة غير موجودة في القائمة');
+            if (!ok) {
+              setInvalidGuessRow(game.guesses.length);
+              setInvalidGuessSignal(prev => prev + 1);
+              showToast('الكلمة غير موجودة في القائمة');
+            }
           }}
           onBackspace={game.removeLetter}
           keyStates={keyStates}
