@@ -1,6 +1,7 @@
 import React from 'react';
-import { Pressable, Text, ViewStyle } from 'react-native';
+import { Platform, Pressable, Text, ViewStyle } from 'react-native';
 import { COLORS } from '../utils/colors';
+import type { SvgProps } from 'react-native-svg';
 
 export type KeyState = 'correct' | 'present' | 'absent';
 
@@ -12,6 +13,7 @@ interface KeyProps {
   height: number;
   kind?: 'normal' | 'action';
   fontSize?: number;
+  Icon?: React.ComponentType<SvgProps>;
 }
 
 export function Key({
@@ -22,6 +24,7 @@ export function Key({
   height,
   kind = 'normal',
   fontSize = 18,
+  Icon,
 }: KeyProps) {
   const backgroundColor =
     state === 'correct' ? COLORS.green :
@@ -31,6 +34,11 @@ export function Key({
 
   const fontWeight = '500';
   const color = state === 'absent' ? COLORS.lightGrey : '#1B1B1B';
+  const fontFamily = Platform.select({
+    ios: 'System',
+    android: 'sans-serif-medium',
+    default: 'System',
+  });
 
   const borderRadius = Math.round(width * 0.28);
 
@@ -58,19 +66,23 @@ export function Key({
         } as ViewStyle,
       ]}
     >
-      <Text
-        allowFontScaling={false}
-        style={{
-          fontFamily: 'System',
-          fontSize,
-          fontWeight,
-          color,
-          includeFontPadding: false,
-          textAlignVertical: 'center',
-        }}
-      >
-        {label}
-      </Text>
+      {Icon ? (
+        <Icon width={Math.round(fontSize * 1.2)} height={Math.round(fontSize * 1.2)} />
+      ) : (
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontFamily,
+            fontSize,
+            fontWeight,
+            color,
+            includeFontPadding: false,
+            textAlignVertical: 'center',
+          }}
+        >
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }

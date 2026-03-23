@@ -23,6 +23,7 @@ import HelpIcon from './src/media/help.svg';
 import StatsIcon from './src/media/stats.svg';
 import KalemahLogo from './src/media/kalemah.svg';
 import { LoadingScreen } from './src/components/loadingScreen';
+import { ltrRow } from './src/utils/layout';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -172,6 +173,7 @@ function AppInner() {
               width: headerWidth,
               paddingVertical: pillPadV,
               paddingHorizontal: pillPadH,
+              flexDirection: ltrRow,
             },
           ]}
         >
@@ -272,7 +274,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: 'rgba(218, 220, 224, 0.03)',

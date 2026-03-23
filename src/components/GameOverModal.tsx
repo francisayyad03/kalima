@@ -1,7 +1,8 @@
-import { Modal, View, Text, StyleSheet, Pressable, Share, ScrollView, useWindowDimensions, PixelRatio, Linking } from 'react-native';
+import { Linking, Modal, PixelRatio, Pressable, ScrollView, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { TileResult, TileState } from '../game/types';
 import { COLORS } from '../utils/colors';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ltrRow } from '../utils/layout';
 
 interface Stats {
   gamesPlayed: number;
@@ -120,7 +121,7 @@ export function GameOverModal({
           </Pressable>
 
           {/* STATS SUMMARY */}
-          <View style={[styles.statsRow, useWrappedStats && styles.statsRowWrapped]}>
+          <View style={[styles.statsRow, { flexDirection: ltrRow }, useWrappedStats && styles.statsRowWrapped]}>
             <StatBlock label="لعبت" value={safeStats.gamesPlayed} wrapped={useWrappedStats} />
             <StatBlock label="نسبة الفوز" value={`${winPercent}%`} wrapped={useWrappedStats} />
             <StatBlock label="السلسلة الحالية" value={safeStats.currentStreak} wrapped={useWrappedStats} />
@@ -132,7 +133,7 @@ export function GameOverModal({
             {safeStats.guessDistribution.map((count, index) => {
               const widthPercent = (count / maxDist) * 100;
               return (
-                <View key={index} style={styles.distRow}>
+                <View key={index} style={[styles.distRow, { flexDirection: ltrRow }]}>
                   <Text style={styles.distLabel}>{index + 1}</Text>
                   <View style={styles.barBackground}>
                     {count > 0 && (
@@ -148,7 +149,7 @@ export function GameOverModal({
           </ScrollView>
 
           {/* BUTTONS */}
-          <View style={styles.buttonRow}>
+          <View style={[styles.buttonRow, { flexDirection: ltrRow }]}>
             <Pressable onPress={onShare} style={styles.shareButton}>
               <Text style={styles.shareButtonText}>مشاركة</Text>
             </Pressable>
@@ -231,7 +232,6 @@ const styles = StyleSheet.create({
   },
 
   statsRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
@@ -266,7 +266,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   distRow: {
-    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 6,
   },
@@ -296,7 +295,6 @@ const styles = StyleSheet.create({
   },
 
   buttonRow: {
-    flexDirection: 'row',
     width: '100%',
     gap: 10,
   },
