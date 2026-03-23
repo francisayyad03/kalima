@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, Pressable, Linking, ScrollView, useWindowDimensions } from 'react-native';
+import { Modal, View, Text, StyleSheet, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import { COLORS } from '../utils/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -6,15 +6,10 @@ interface HelpModalProps {
   visible: boolean;
   onClose: () => void;
 }
-const PRIVACY_URL = 'https://francisayyad03.github.io/kalimaPrivacy/';
 export function HelpModal({ visible, onClose }: HelpModalProps) {
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const modalMaxHeight = height - insets.top - insets.bottom - 24;
-
-  const openPrivacy = () => {
-    Linking.openURL(PRIVACY_URL);
-  };
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
@@ -60,10 +55,6 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
                 • لا يتم استخدام الحركات (الفتحة، الضمة، الكسرة...)
             </Text>
             </View>
-
-          <Pressable onPress={openPrivacy}>
-            <Text style={styles.privacyText}>سياسة الخصوصية</Text>
-          </Pressable>
           </ScrollView>
 
           <Pressable onPress={onClose} style={styles.button}>
@@ -172,11 +163,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
-  privacyText: {
-    color: COLORS.lightGrey,
-    fontSize: 13,
-    textDecorationLine: 'underline',
-    marginBottom: 18,
-  }
 });
