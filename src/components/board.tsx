@@ -1,6 +1,7 @@
 import { View, StyleSheet, useWindowDimensions, Platform } from 'react-native';
 import { Tile } from './tile';
 import { TileResult } from '../game/types';
+import { rtlRow } from '../utils/layout';
 
 interface BoardProps {
   guesses: string[];
@@ -48,7 +49,7 @@ export function Board({ guesses, results, currentGuess, status }: BoardProps) {
         const result = results[rowIndex];
 
         return (
-          <View key={rowIndex} style={[styles.row, { gap, marginBottom: gap }]}>
+          <View key={rowIndex} style={[styles.row, { flexDirection: rtlRow, gap, marginBottom: gap }]}>
             {Array.from({ length: COLS }).map((_, colIndex) => {
               let letter = '';
               let state;
@@ -87,6 +88,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   row: {
-    flexDirection: 'row-reverse',
   },
 });

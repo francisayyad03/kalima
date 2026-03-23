@@ -1,6 +1,7 @@
 import { Modal, View, Text, StyleSheet, Pressable, ScrollView, useWindowDimensions, PixelRatio } from 'react-native';
 import { COLORS } from '../utils/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ltrRow } from '../utils/layout';
 
 interface Stats {
   gamesPlayed: number;
@@ -51,7 +52,7 @@ export function StatsModal({ visible, stats, onClose }: StatsModalProps) {
           <Text style={styles.title}>إحصائياتك</Text>
 
           {/* ====== STATS SUMMARY ====== */}
-          <View style={[styles.statsRow, useWrappedStats && styles.statsRowWrapped]}>
+          <View style={[styles.statsRow, { flexDirection: ltrRow }, useWrappedStats && styles.statsRowWrapped]}>
             <StatBlock label="لعبت" value={safeStats.gamesPlayed} wrapped={useWrappedStats} />
             <StatBlock label="نسبة الفوز" value={`${winPercent}%`} wrapped={useWrappedStats} />
             <StatBlock label="السلسلة الحالية" value={safeStats.currentStreak} wrapped={useWrappedStats} />
@@ -64,7 +65,7 @@ export function StatsModal({ visible, stats, onClose }: StatsModalProps) {
               const widthPercent = (count / maxDist) * 100;
 
               return (
-                <View key={index} style={styles.distRow}>
+                <View key={index} style={[styles.distRow, { flexDirection: ltrRow }]}>
                   <Text style={styles.distLabel}>{index + 1}</Text>
                   <View style={styles.barBackground}>
                     {count > 0 && (
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
   },
 
   statsRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   distRow: {
-    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 6,
   },

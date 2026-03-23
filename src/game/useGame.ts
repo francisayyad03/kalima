@@ -40,6 +40,20 @@ const DEFAULT_STATS: Stats = {
   lastWinDayId: null,
 };
 
+function normalizeStatsForToday(stats: Stats, today: string): Stats {
+  if (!stats.lastWinDayId) {
+    return stats.currentStreak === 0 ? stats : { ...stats, currentStreak: 0 };
+  }
+
+  const daysSinceLastWin = diffDays(today, stats.lastWinDayId);
+
+  if (daysSinceLastWin > 1) {
+    return stats.currentStreak === 0 ? stats : { ...stats, currentStreak: 0 };
+  }
+
+  return stats;
+}
+
 export function useGame() {
   const initialDayId = getLocalDayId();
 
@@ -63,7 +77,9 @@ export function useGame() {
 
       // stats
       const savedStats = await loadStats();
-      if (savedStats) setStats(savedStats as any);
+      if (savedStats) {
+        setStats(normalizeStatsForToday(savedStats as Stats, today));
+      }
 
       // game
       const savedGame = await loadGameState();

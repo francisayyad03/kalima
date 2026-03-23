@@ -1,6 +1,7 @@
 import { Modal, View, Text, StyleSheet, Pressable, Linking, ScrollView, useWindowDimensions } from 'react-native';
 import { COLORS } from '../utils/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { rtlRow } from '../utils/layout';
 
 interface HelpModalProps {
   visible: boolean;
@@ -33,15 +34,15 @@ export function HelpModal({ visible, onClose }: HelpModalProps) {
 
           {/* ===== RULES ===== */}
           <View style={styles.rules}>
-            <View style={styles.ruleRow}>
+            <View style={[styles.ruleRow, { flexDirection: rtlRow }]}>
               <View style={[styles.ruleSwatch, { backgroundColor: COLORS.green }]} />
               <Text style={styles.ruleLine}>الحرف موجود وبمكانه الصحيح</Text>
             </View>
-            <View style={styles.ruleRow}>
+            <View style={[styles.ruleRow, { flexDirection: rtlRow }]}>
               <View style={[styles.ruleSwatch, { backgroundColor: COLORS.yellow }]} />
               <Text style={styles.ruleLine}>الحرف موجود لكن بمكان آخر</Text>
             </View>
-            <View style={styles.ruleRow}>
+            <View style={[styles.ruleRow, { flexDirection: rtlRow }]}>
               <View style={[styles.ruleSwatch, { backgroundColor: '#787C7E' }]} />
               <Text style={styles.ruleLine}>الحرف غير موجود في الكلمة</Text>
             </View>
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   ruleRow: {
-    flexDirection: 'row-reverse',
     alignItems: 'center',
     gap: 10,
     marginBottom: 8,

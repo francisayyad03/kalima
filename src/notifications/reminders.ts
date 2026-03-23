@@ -3,6 +3,7 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { loadStats } from '../game/storage';
 import { diffDays, getLocalDayId } from '../utils/day';
+import { buildReminderDates } from './reminderPlan';
 
 const REMINDER_IDS_KEY = 'arabicwordle.reminderIds.v1';
 const TEST_MESSAGES = [
@@ -74,28 +75,26 @@ async function cancelExistingReminderSchedulesAsync() {
 
 async function scheduleReminderNotificationsAsync() {
   const stats = await loadStats();
-  const today = getLocalDayId();
-
-  // Do not schedule reminders for days already completed.
-  if (stats?.lastCompletedDayId === today) {
-    await AsyncStorage.setItem(REMINDER_IDS_KEY, JSON.stringify([]));
-    return;
-  }
-
+  const now = new Date();
   const body = await pickDailyMessageFromStats();
+  const reminderDates = buildReminderDates(now, stats?.lastCompletedDayId);
 
-  const dailyId = await Notifications.scheduleNotificationAsync({
-    content: {
-      body,
-      sound: false,
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour: 20,
-      minute: 0,
-    },
-  });
-  await AsyncStorage.setItem(REMINDER_IDS_KEY, JSON.stringify([dailyId]));
+  const reminderIds = await Promise.all(
+    reminderDates.map((date) =>
+      Notifications.scheduleNotificationAsync({
+        content: {
+          body,
+          sound: false,
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          date,
+        },
+      })
+    )
+  );
+
+  await AsyncStorage.setItem(REMINDER_IDS_KEY, JSON.stringify(reminderIds));
 }
 
 export async function setupReminderNotificationsAsync() {

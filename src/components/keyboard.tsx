@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, StyleSheet, useWindowDimensions, Platform } from 'react-native';
 import { Key, KeyState } from './key';
+import { ltrRow } from '../utils/layout';
+import EnterKeyIcon from '../media/enterKey.svg';
+import BackspaceKeyIcon from '../media/backspaceKey.svg';
 
 interface KeyboardProps {
   onKey: (letter: string) => void;
@@ -9,7 +12,7 @@ interface KeyboardProps {
   keyStates: Map<string, KeyState>;
 }
 
-const ROWS: Array<Array<string>> = [
+const ROWS: string[][] = [
   ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', '⌫'],
   ['ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ة'],
   ['ء', 'ظ', 'ط', 'ذ', 'د', 'ز', 'ر', 'و', 'ى', 'Enter'],
@@ -54,17 +57,18 @@ export function Keyboard({ onKey, onEnter, onBackspace, keyStates }: KeyboardPro
   return (
     <View style={[styles.outer, { paddingHorizontal: OUTER_PADDING, marginBottom: isLargePhone ? 24 : 0 }]}>
       {ROWS.map((row, i) => (
-        <View key={i} style={styles.row}>
+        <View key={i} style={[styles.row, { flexDirection: ltrRow }]}>
           {row.map((k) => {
             if (k === 'Enter') {
               return (
                 <Key
                   key="Enter"
-                  label="↵"
+                  label="Enter"
                   kind="action"
                   width={keyWidth}
                   height={keyHeight}
                   fontSize={fontSize}
+                  Icon={EnterKeyIcon}
                   onPress={onEnter}
                 />
               );
@@ -74,11 +78,12 @@ export function Keyboard({ onKey, onEnter, onBackspace, keyStates }: KeyboardPro
               return (
                 <Key
                   key="backspace"
-                  label="⌫"
+                  label="Backspace"
                   kind="action"
                   width={keyWidth}
                   height={keyHeight}
                   fontSize={fontSize}
+                  Icon={BackspaceKeyIcon}
                   onPress={onBackspace}
                 />
               );
@@ -109,7 +114,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   row: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
